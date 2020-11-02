@@ -312,6 +312,19 @@ aside h3 {
   margin: 0 !important;
 }
 
+figure {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+figcaption p {
+  font-size: 13px !important;
+}
+
+figure img {
+  margin: 0px 0px 0px 0px !important;
+}
+
 .article {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.33);
   overflow: hidden;
