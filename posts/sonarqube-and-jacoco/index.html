@@ -150,7 +150,7 @@ the XML format into SonarQube.</p>
 <h2 id=maven-module-structure>Maven module structure</h2>
 <p>The following Maven project module structure is assumed in the following:</p>
 <p>A top-level reactor <code>pom.xml</code> including three <code>pom.xml</code>&rsquo;s for the modules <code>module-a</code>, <code>module-b</code>, and <code>module-c</code>:</p>
-<pre><code>/pom.xml
+<pre tabindex=0><code>/pom.xml
 /module-a/pom.xml
 /module-b/pom.xml
 /module-c/pom.xml
@@ -292,7 +292,7 @@ or by specifying the above plugin entry only for some modules.</p>
 <p>The <code>prepare-agent</code> goal modifies the <code>argLine</code> configuration to instrument the <code>maven-surefire-plugin</code>, which runs the
 tests. <a href=https://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html>See the documentation</a> if you need to modify command line arguments.</p>
 <p>Running <code>mvn package</code> now should output something like</p>
-<pre><code>[INFO] --- jacoco-maven-plugin:0.8.6:prepare-agent (prepare-agent) @ module-a ---
+<pre tabindex=0><code>[INFO] --- jacoco-maven-plugin:0.8.6:prepare-agent (prepare-agent) @ module-a ---
 [INFO] argLine set to ...
 </code></pre><p>for each subproject. Also, it should make <code>jacoco.exec</code> files appear inside the <code>target</code> output folder of each
 subproject where tests are run. You can also open them in IntelliJ IDEA via Run ⇾ &ldquo;Show Coverage Data&mldr;&rdquo;
@@ -399,7 +399,7 @@ modules as well, looks like this:</p>
 </code></pre></td></tr></table>
 </div>
 </div><p>Running <code>mvn verify</code> now should output the following when <code>module-c</code> is reached:</p>
-<pre><code>[INFO] --- jacoco-maven-plugin:0.8.6:report-aggregate (report-aggregate) @ module-c ---
+<pre tabindex=0><code>[INFO] --- jacoco-maven-plugin:0.8.6:report-aggregate (report-aggregate) @ module-c ---
 [INFO] Loading execution data file .../module-a/target/jacoco.exec
 [INFO] Loading execution data file .../module-b/target/jacoco.exec
 [INFO] Loading execution data file .../module-c/target/jacoco.exec
@@ -430,7 +430,7 @@ making sure the tests run earlier than this phase.</p>
 <h3 id=step-3-configure-the-sonarqube-analysis>Step 3: Configure the SonarQube analysis</h3>
 <p>When running inside your CI, the <a href=https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-maven/>Sonar Maven Plugin</a> is usually run explicitly from the command line
 as follows:</p>
-<pre><code>mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+<pre tabindex=0><code>mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
 </code></pre><p>It runs the goal <code>sonar</code> after the <code>verify</code> phase has completed. The Sonar Maven Plugin (more precisely,
 the <a href=https://docs.sonarqube.org/display/PLUG/JaCoCo+Plugin>Sonar JaCoCo analysis plugin</a>) picks up coverage if it finds a JaCoCo XML report specified by
 the property <code>sonar.coverage.jacoco.xmlReportPaths</code> when it analyzes a sub-project, such as <code>module-a</code>.</p>
@@ -504,7 +504,7 @@ JaCoCo maven report.</p>
 but configuring this once in the reactor pom using the relative path trick appears more elegant.</p>
 <p>Now, when running the Sonar Maven Plugin with <code>mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar</code>, one
 should see the following output whenever a module is analyzed:</p>
-<pre><code>[INFO] --- sonar-maven-plugin:3.7.0.1746:sonar (default-cli) @ reactor ---
+<pre tabindex=0><code>[INFO] --- sonar-maven-plugin:3.7.0.1746:sonar (default-cli) @ reactor ---
 ...
 [INFO] ------------- Run sensors on module module-a
 ...
@@ -514,7 +514,7 @@ should see the following output whenever a module is analyzed:</p>
 ...
 ... similar output for module-b and module-c ...
 </code></pre><p>If you have specified more than one <code>xmlReportPaths</code>, you encounter an output line</p>
-<pre><code>...
+<pre tabindex=0><code>...
 [INFO] Coverage report doesn't exist for pattern: ...
 ...
 </code></pre><p>This is ok as long as it outputs that one report has been imported.</p>
@@ -821,7 +821,7 @@ Follow the tutorial for &ldquo;GitHub Actions&rdquo; in your Sonar project below
 </nav>
 </div>
 </footer>
-<script src=https://blog.qaware.de/js/index.min.f08a35d4b87d7299dfea07f8f303a7f446b22520aa25473822cf52d34dd9d0ac91f521bc53f0a60b7bd7f309b25c1db229130ad6e54651c3b389af7ab25f4661.js></script>
+<script src=https://blog.qaware.de/js/index.min.8a1f47e1f14a890f4cd4ed7176a260ad67504f0f9ad2aa98650041defa70314d6d638eee309ba5b358769c6d6af791134d255885d21daee0299426b855837ddc.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-538827-3"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','UA-538827-3')</script>
 </body>

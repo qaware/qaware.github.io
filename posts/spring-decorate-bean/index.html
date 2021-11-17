@@ -239,7 +239,7 @@ the delegate is called.</p>
 </div>
 </div><p>We just created a new <code>LoggingOurService</code> and passed a new <code>OurServiceImpl</code> via the constructor.</p>
 <p>This setup prints:</p>
-<pre><code>de.qaware.blog.decorator.decorator.impl.LoggingOurService - doSomething() called
+<pre tabindex=0><code>de.qaware.blog.decorator.decorator.impl.LoggingOurService - doSomething() called
 de.qaware.blog.decorator.decorator.NonSpringMain - Result: 'something'
 </code></pre><p>the &ldquo;doSomething() called&rdquo; log message is from <code>LoggingOurService</code>, the result is returned from the delegate <code>OurServiceImpl</code>.</p>
 <p>So far, so good. Now let&rsquo;s get this setup running in Spring. I&rsquo;m using Spring Boot here, but all this stuff is also applicable to plain Spring.</p>
@@ -321,7 +321,7 @@ de.qaware.blog.decorator.decorator.NonSpringMain - Result: 'something'
 </code></pre></td></tr></table>
 </div>
 </div><p>When we start that application, Spring fails with:</p>
-<pre><code>Parameter 0 of constructor in de.qaware.blog.decorator.decorator.Runner required a single bean, but 2 were found:
+<pre tabindex=0><code>Parameter 0 of constructor in de.qaware.blog.decorator.decorator.Runner required a single bean, but 2 were found:
 	- ourServiceDelegate: defined by method 'ourServiceDelegate' in class path resource [de/qaware/blog/decorator/decorator/OurConfiguration.class]
 	- loggingOurService: defined by method 'loggingOurService' in class path resource [de/qaware/blog/decorator/decorator/OurConfiguration.class]
 </code></pre><p>Spring is complaining that it found 2 beans and now it&rsquo;s confused which one to inject into the <code>Runner</code>.</p>
@@ -511,7 +511,7 @@ with some other bean.</p>
 <p>The last line wraps a new <code>LoggingOurService</code> around the bean (which is a <code>OurService</code>) and returns it. Spring now replaces the original bean (the one in the <code>bean</code> argument, type <code>OurService</code>) with
 the one returned from this method (type <code>LoggingOurService</code>).</p>
 <p>Let&rsquo;s run our application:</p>
-<pre><code>guration6$LoggingOurServiceBeanProcessor : Decorating bean of type de.qaware.blog.decorator.decorator.impl.OurServiceImpl
+<pre tabindex=0><code>guration6$LoggingOurServiceBeanProcessor : Decorating bean of type de.qaware.blog.decorator.decorator.impl.OurServiceImpl
 d.q.blog.decorator.decorator.Runner      : Class of ourService: de.qaware.blog.decorator.decorator.impl.LoggingOurService
 d.q.b.d.d.impl.LoggingOurService         : doSomething() called
 d.q.blog.decorator.decorator.Runner      : Result: 'something'
@@ -685,7 +685,7 @@ bean the post processor has created.</p>
 </nav>
 </div>
 </footer>
-<script src=https://blog.qaware.de/js/index.min.f08a35d4b87d7299dfea07f8f303a7f446b22520aa25473822cf52d34dd9d0ac91f521bc53f0a60b7bd7f309b25c1db229130ad6e54651c3b389af7ab25f4661.js></script>
+<script src=https://blog.qaware.de/js/index.min.8a1f47e1f14a890f4cd4ed7176a260ad67504f0f9ad2aa98650041defa70314d6d638eee309ba5b358769c6d6af791134d255885d21daee0299426b855837ddc.js></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-538827-3"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','UA-538827-3')</script>
 </body>
