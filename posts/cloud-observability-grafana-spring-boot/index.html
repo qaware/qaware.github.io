@@ -1,0 +1,616 @@
+<!doctype html><html lang=en>
+<head>
+<title>Cloud Observability with Grafana and Spring Boot - QAware | Software Engineering Blog</title>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes">
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=description content="Cloud Observability of Spring Boot applications in Kubernetes with Grafana, Tempo, Loki, Prometheus showing Traces 2 Logs, Logs 2 Traces and Metrics 2 …">
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cloud Observability with Grafana and Spring Boot">
+<meta property="og:description" content="Cloud Observability of Spring Boot applications in Kubernetes with Grafana, Tempo, Loki, Prometheus showing Traces 2 Logs, Logs 2 Traces and Metrics 2 …">
+<meta property="og:url" content="https://blog.qaware.de/posts/cloud-observability-grafana-spring-boot/">
+<meta property="og:image" content="https://blog.qaware.de/images/cloud-observability-grafana-spring-boot/title.svg">
+<link rel=apple-touch-icon sizes=180x180 href=https://blog.qaware.de/images/icons/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=https://blog.qaware.de/images/icons/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=https://blog.qaware.de/images/icons/favicon-16x16.png>
+<link rel=manifest href=https://blog.qaware.de/images/icons/site.webmanifest>
+<meta name=msapplication-TileColor content="#da532c">
+<meta name=theme-color content="#ffffff">
+<link rel=apple-touch-icon sizes=57x57 href=/apple-icon-57x57.png>
+<link rel=apple-touch-icon sizes=60x60 href=/apple-icon-60x60.png>
+<link rel=apple-touch-icon sizes=72x72 href=/apple-icon-72x72.png>
+<link rel=apple-touch-icon sizes=76x76 href=/apple-icon-76x76.png>
+<link rel=apple-touch-icon sizes=114x114 href=/apple-icon-114x114.png>
+<link rel=apple-touch-icon sizes=120x120 href=/apple-icon-120x120.png>
+<link rel=apple-touch-icon sizes=144x144 href=/apple-icon-144x144.png>
+<link rel=apple-touch-icon sizes=152x152 href=/apple-icon-152x152.png>
+<link rel=apple-touch-icon sizes=180x180 href=/apple-icon-180x180.png>
+<link rel=icon type=image/png sizes=192x192 href=/android-icon-192x192.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=96x96 href=/favicon-96x96.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/manifest.json>
+<link rel=icon href=/QAware_Logo_Icon_RGB_Petrol.svg type=image/svg+xml>
+<meta name=msapplication-TileColor content="#ffffff">
+<meta name=msapplication-TileImage content="/ms-icon-144x144.png">
+<meta name=theme-color content="#ffffff">
+<link rel=canonical href=https://blog.qaware.de/posts/cloud-observability-grafana-spring-boot/>
+<link rel=stylesheet href=https://blog.qaware.de/css/main.098c0e189cad2e9f36cf297e63d68287a9f1e1ba37b72c316aafe78722aca094738d3238a359d91fca3eb48fc356b73c7e436c50fac13d61ddfa699fca90005d.css integrity="sha512-CYwOGJytLp82zyl+Y9aCh6nx4bo3tywxaq/nhyKsoJRzjTI4o1nZH8o+tI/DVrc8fkNsUPrBPWHd+mmfypAAXQ==" title=templateStyle>
+<script id=Cookiebot src=https://consent.cookiebot.com/uc.js data-cbid=4e938949-aa56-465e-9c2a-175bb6c31d81 data-blockingmode=auto type=text/javascript></script>
+</head>
+<body>
+<header>
+<div id=main-header>
+<a href=/ id=main-header-logo>
+<img src=/images/icons/logo_qaware.svg alt=QAware id=main-header-logo-img>
+</a>
+<div id=main-header-nav-items-container>
+<nav id=main-nav>
+<ul class=main-nav-menu>
+<li class=main-nav-menu>
+<a href=https://blog.qaware.de/ class="main-nav-menu nav-item">Posts</a>
+<ul class=main-nav-sub-menu>
+<li class=main-nav-sub-menu><a href=https://blog.qaware.de/tags/ class="main-nav-sub-menu nav-item">Tags</a></li>
+<li class=main-nav-sub-menu><a href=https://blog.qaware.de/posts/ class="main-nav-sub-menu nav-item">Archive</a></li>
+</ul>
+</li>
+<li class=main-nav-menu>
+<a href=https://blog.qaware.de/ class="main-nav-menu nav-item">Resources</a>
+<ul class=main-nav-sub-menu>
+<li class=main-nav-sub-menu><a href=https://www.github.com/qaware class=main-nav-sub-menu>GitHub</a></li>
+<li class=main-nav-sub-menu><a href=https://de.slideshare.net/QAware class=main-nav-sub-menu>SlideShare</a></li>
+<li class=main-nav-sub-menu><a href=https://www.youtube.com/user/QAwareGmbH class=main-nav-sub-menu>YouTube</a></li>
+<li class=main-nav-sub-menu><a href=https://www.meetup.com/de-DE/Cloud-Native-Night class=main-nav-sub-menu>Meetup Mainz</a></li>
+<li class=main-nav-sub-menu><a href=https://www.meetup.com/de-DE/cloud-native-muc/ class=main-nav-sub-menu>Meetup Munich</a></li>
+</ul>
+</li>
+<li class=main-nav-menu>
+<a href=https://www.qaware.de class=main-nav-menu>Company</a>
+<ul class=main-nav-sub-menu>
+<li class=main-nav-sub-menu><a href=https://www.qaware.de class=main-nav-sub-menu>Website</a></li>
+<li class=main-nav-sub-menu><a href=https://twitter.com/qaware class=main-nav-sub-menu>Twitter</a></li>
+<li class=main-nav-sub-menu><a href=http://www.linkedin.com/company/qaware-gmbh class=main-nav-sub-menu>Linkedin</a></li>
+<li class=main-nav-sub-menu><a href=http://www.xing.com/companies/qawaregmbh class=main-nav-sub-menu>Xing</a></li>
+<li class=main-nav-sub-menu><a href=http://www.kununu.com/qaware class=main-nav-sub-menu>Kununu</a></li>
+</ul>
+</li>
+<li class=main-nav-menu>
+<a href=https://www.qaware.de/kontakt class=main-nav-menu>Contact</a>
+</li>
+</ul>
+</nav>
+<a id=mobile-nav-icon-link href=#>
+<div id=mobile-nav-icon></div>
+</a>
+</div>
+</div>
+<div id=mobile-nav-dropdown>
+<nav id=mobile-nav class="mobile-nav collapsed">
+<ul>
+<li>
+<a href=https://blog.qaware.de/ class=nav-item>Posts</a>
+<ul>
+<li><a href=https://blog.qaware.de/tags/ class=nav-item>Tags</a></li>
+<li><a href=https://blog.qaware.de/posts/ class=nav-item>Archive</a></li>
+</ul>
+</li>
+<li>
+<a href=https://blog.qaware.de/ class=nav-item>Resources</a>
+<ul>
+<li><a href=https://www.github.com/qaware>GitHub</a></li>
+<li><a href=https://de.slideshare.net/QAware>SlideShare</a></li>
+<li><a href=https://www.youtube.com/user/QAwareGmbH>YouTube</a></li>
+<li><a href=https://www.meetup.com/de-DE/Cloud-Native-Night>Meetup Mainz</a></li>
+<li><a href=https://www.meetup.com/de-DE/cloud-native-muc/>Meetup Munich</a></li>
+</ul>
+</li>
+<li>
+<a href=https://www.qaware.de class=nav-item>Company</a>
+<ul>
+<li><a href=https://www.qaware.de>Website</a></li>
+<li><a href=https://twitter.com/qaware>Twitter</a></li>
+<li><a href=http://www.linkedin.com/company/qaware-gmbh>Linkedin</a></li>
+<li><a href=http://www.xing.com/companies/qawaregmbh>Xing</a></li>
+<li><a href=http://www.kununu.com/qaware>Kununu</a></li>
+</ul>
+</li>
+<li>
+<a href=https://www.qaware.de/kontakt class=nav-item>Contact</a>
+</li>
+</ul>
+</nav>
+</div>
+</header>
+<main>
+<div class="wrap mt-4 post">
+<div><p class="post_date pale">31. March 2022</p>
+<h1 class=post_title>Cloud Observability with Grafana and Spring Boot</h1>
+<p class=pale>by <a href=https://github.com/neiser>Andreas Grub</a> | 1532 words | ~8 min read</p>
+<p>
+<a class=post_tag href=/tags/cloud/>cloud</a>
+<a class=post_tag href=/tags/observability/>observability</a>
+<a class=post_tag href=/tags/grafana/>grafana</a>
+<a class=post_tag href=/tags/tempo/>tempo</a>
+<a class=post_tag href=/tags/loki/>loki</a>
+<a class=post_tag href=/tags/prometheus/>prometheus</a>
+<a class=post_tag href=/tags/spring-boot/>spring boot</a>
+<a class=post_tag href=/tags/spring/>spring</a>
+<a class=post_tag href=/tags/kubernetes/>kubernetes</a>
+<a class=post_tag href=/tags/exemplars/>exemplars</a>
+<a class=post_tag href=/tags/tracing/>tracing</a>
+<a class=post_tag href=/tags/telemetry/>telemetry</a>
+<a class=post_tag href=/tags/instrumentation/>instrumentation</a>
+</p>
+<div class=post_body>
+<div class=post_inner>
+<img src=https://blog.qaware.de/images/cloud-observability-grafana-spring-boot/title.svg alt=cloud-observability-grafana-spring-boot/title.svg class="post_thumbnail mt-1">
+<p>Cloud observability is a crucial component of any serious Kubernetes deployment.
+It tells operations that something is working too slowly with metrics or helps developers debug tricky issues only occurring on production environments with logs.
+However, have you ever looked at a 0.9-percentile request latency graph and wondered why it spiked at certain times?
+Of course, those spikes are only happening on the busy production environment and are not reproducible with simpler means.
+You, as the poor soul tasked with debugging this issue, start combing the logs for interesting errors around that time span.
+Usually, that is cumbersome as there are so much logs and so little hints where to look at.</p>
+<p><a href=https://grafana.com/blog/2021/03/31/intro-to-exemplars-which-enable-grafana-tempos-distributed-tracing-at-massive-scale/>Here, exemplars may help</a>: In short, they are shown together with metrics and tell you about example events contributing to that 0.9 percentile bucket. Those events (or requests) are uniquely identified with a trace id, which makes it quick and easy to correlate them with logs or look at the corresponding request trace across the whole cluster.</p>
+<p>This post presents a demo in <a href=https://minikube.sigs.k8s.io/docs/start/>Minikube</a> which instruments and observes a simple <a href=https://spring.io/projects/spring-boot>Spring Boot application</a> using Grafana with Prometheus, Loki and Tempo.
+It focuses on how to use the new and heavily promoted <strong>exemplars</strong> feature, which enables a quick transition from metrics to traces and logs.</p>
+<p>If you&rsquo;re impatient, check out <a href=https://github.com/qaware/cloud-observability-grafana-spring-boot>how to run the demo locally</a>.</p>
+<h1 id=a-short-introduction-to-cloud-observability>A short introduction to cloud observability</h1>
+<p>Being able to observe an application or workload within the cloud is crucial for a reliable operation and for debugging potential issues.
+To this end, observability usually consists of metrics, logs and traces, as detailed in the following:</p>
+<p><strong>Metrics</strong> are usually counters and gauges exposed by the application, which may tell about the healthiness or enable looking at <a href=https://orangematter.solarwinds.com/2017/10/05/monitoring-and-observability-with-use-and-red/>&ldquo;utilization/saturation/rate/error/duration&rdquo; (USERED)</a> type information.
+Metrics are limited in cardinality and certainly do not allow per-request investigation.</p>
+<p><strong>Logs</strong> are written by the application and, depending on the log level, may contain very detailed human-readable information about the application.
+They may contain structured data, such as a trace id, to correlate them with particular requests made against the application.</p>
+<p><strong>Traces</strong> are collected during a single request, uniquely identified with a trace id, and are typically propagated across many applications communicating within a cluster.
+They show application internals such as database accesses and record the duration of each such operation as separate spans.</p>
+<p>There is a large amount of tools and SaaS providers that support the aggregation of the above-mentioned diagnosability data.
+Here, we will propose using the following <a href=https://grafana.com/>Grafana</a>-based stack for a <a href=https://kubernetes.io/>Kubernetes</a> cluster, which is completely free software:</p>
+<ul>
+<li><a href=https://prometheus.io/>Prometheus</a> to collect metrics</li>
+<li><a href=https://grafana.com/docs/loki/latest/clients/promtail/>Promtail</a> to forward logs to <a href=https://grafana.com/docs/loki/latest/>Loki</a></li>
+<li><a href=https://grafana.com/docs/tempo/latest/>Tempo</a> to receive traces</li>
+</ul>
+<p>In order to enable observability for a specific workload, the workload needs to be instrumented.
+How the instrumentation works depends on the chosen programming language and frameworks the application is using.
+Here, we use the <a href=https://github.com/open-telemetry/opentelemetry-java-instrumentation>OpenTelemetry Java Agent</a> to instrument a Spring Boot application written in Java.</p>
+<h1 id=visual-guide-through-the-observability-demo>Visual guide through the Observability Demo</h1>
+<p>This section highlights the <a href=https://github.com/qaware/cloud-observability-grafana-spring-boot>accompanying demo</a> for this blog post.
+It&rsquo;s now a good time to spin up the demo locally and then follow this guide interactively on your local machine.
+See below for a thorough explanation what design decision are made for the demo and what technical details are taken care of.</p>
+<p>Open the <a href=http://localhost:3000/>locally running Grafana</a> and browse to the <a href=http://localhost:3000/d/qiDRdxsnk/spring-boot-demo>Spring Boot Demo dashboard</a>.
+You&rsquo;ll see the following panel:</p>
+<img src=/images/cloud-observability-grafana-spring-boot/screenshot-request-latency.png.svg alt="Spring Boot Demo dashboard">
+<p>It uses the default Spring Boot <code>http_server_requests</code> metric to display the average, 0.7-percentile and 0.9-percentile latency of all HTTP requests made against the application.
+For demo purposes, a cron job runs inside the cluster every 5 minutes executing a request against the <code>/trigger-me</code> endpoint of the Spring Boot application.
+So it might take a while to actually see metrics if you&rsquo;ve just spun up the demo.</p>
+<p>Hovering one of the &ldquo;exemplar dots&rdquo; shows:</p>
+<img src=/images/cloud-observability-grafana-spring-boot/screenshot-request-latency-exemplar2.png.svg alt="Spring Boot Demo dashboard Exemplar Mouse Over">
+<p>Note how exemplars represent the bridge from aggregated metrics to request-based traces and subsequent detailed logs.
+Then, clicking the &ldquo;View in Tempo&rdquo; button takes you to the trace of the recorded exemplar:</p>
+<img src=/images/cloud-observability-grafana-spring-boot/screenshot-tempo.png.svg alt="Trace viewed in Tempo">
+<p>The trace would be much more feature-rich thanks to the automatic instrumentation by the <a href=https://github.com/open-telemetry/opentelemetry-java-instrumentation>OpenTelemetry agent</a>.
+For example, it would show database accesses and also external calls to other applications or remote endpoints.
+However, the deployed demo app is quite simple.</p>
+<p>Next, we can have a look at the log output of the application pod by clicking the indicated button above:</p>
+<img src=/images/cloud-observability-grafana-spring-boot/screenshot-logs-from-trace.png.svg alt="Loki Logs from Trace">
+<p>The above Loki query is limited to the time range of the trace and focuses on the pod which produced the trace (or span).
+It would be possible to include the trace id as well to narrow down the shown logs even more, but that approach might miss logs not properly reported with the trace id.</p>
+<p>Finally, whenever you encounter a log reporting a trace id, you can view the trace in Tempo:</p>
+<img src=/images/cloud-observability-grafana-spring-boot/screenshot-logs-to-traces.png.svg alt="Loki Logs to Trace">
+<p>Hopefully, this visual guide has given you a good impression what the demo is capable of.
+In particular, the exemplar support should appear quite useful to you if you were ever asked by operations why a metric has triggered an alert, and you needed to figure out what could be the root cause.
+Read on if you are interested in more technical details.</p>
+<h1 id=details-of-the-observability-demo>Details of the Observability Demo</h1>
+<p>Please always refer to the <a href=https://github.com/qaware/cloud-observability-grafana-spring-boot>full implementation of the demo</a>. The next sections highlight some interesting code snippets only.</p>
+<h2 id=instrumenting-a-spring-boot-application>Instrumenting a Spring Boot application</h2>
+<p>Injecting the OpenTelemetry agent and building the Spring Boot application is done using Docker:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-dockerfile data-lang=dockerfile><span class=k>FROM</span><span class=s> curlimages/curl:7.81.0 AS download</span><span class=err>
+</span><span class=err></span><span class=k>ARG</span> <span class=nv>OTEL_AGENT_VERSION</span><span class=o>=</span><span class=s2>&#34;1.12.1&#34;</span><span class=err>
+</span><span class=err></span><span class=k>RUN</span> curl --silent --fail -L <span class=s2>&#34;https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v</span><span class=si>${</span><span class=nv>OTEL_AGENT_VERSION</span><span class=si>}</span><span class=s2>/opentelemetry-javaagent.jar&#34;</span> <span class=se>\
+</span><span class=se></span>    -o <span class=s2>&#34;</span><span class=nv>$HOME</span><span class=s2>/opentelemetry-javaagent.jar&#34;</span><span class=err>
+</span><span class=err>
+</span><span class=err></span><span class=k>FROM</span><span class=s> maven:eclipse-temurin AS build</span><span class=err>
+</span><span class=err></span><span class=k>ADD</span> . /build<span class=err>
+</span><span class=err></span><span class=k>RUN</span> <span class=nb>cd</span> /build <span class=o>&amp;&amp;</span> mvn package --quiet<span class=err>
+</span><span class=err>
+</span><span class=err></span><span class=k>FROM</span><span class=s> eclipse-temurin:17</span><span class=err>
+</span><span class=err></span><span class=c># Healthcheck is done by Kubernetes probes</span><span class=err>
+</span><span class=err>HEALTHCHECK</span> NONE<span class=err>
+</span><span class=err></span><span class=k>COPY</span> --from<span class=o>=</span>build /build/target/*.jar /app.jar<span class=err>
+</span><span class=err></span><span class=k>COPY</span> --from<span class=o>=</span>download /home/curl_user/opentelemetry-javaagent.jar /opentelemetry-javaagent.jar<span class=err>
+</span><span class=err></span><span class=k>ENTRYPOINT</span> <span class=o>[</span><span class=s2>&#34;java&#34;</span>, <span class=se>\
+</span><span class=se></span>  <span class=s2>&#34;-javaagent:/opentelemetry-javaagent.jar&#34;</span>, <span class=se>\
+</span><span class=se></span>  <span class=s2>&#34;-jar&#34;</span>, <span class=s2>&#34;/app.jar&#34;</span> <span class=se>\
+</span><span class=se></span>  <span class=o>]</span><span class=err>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>The OpenTelemetry agent then injects the <code>trace_id</code> into <a href=https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/docs/logger-mdc-instrumentation.md>Logback&rsquo;s Mapped Diagnostic Context (MDC)</a>, which can then be added to all log statements as part of the <code>application.yaml</code>:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>logging.pattern.level</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;%prefix(%mdc{trace_id:-0}) %5p&#39;</span><span class=w>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>This enables correlation of log statements to a trace, which may involve many applications during one request.</p>
+<p>Also, the Spring Boot Helm chart tells the OpenTelemetry agent to deliver traces to Tempo using the following environment variables (see <code>deployment.yaml</code>):</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>env</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>OTEL_EXPORTER_OTLP_ENDPOINT</span><span class=w>
+</span><span class=w>    </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=l>http://tempo.tempo:4317</span><span class=w>
+</span><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>OTEL_SERVICE_NAME</span><span class=w>
+</span><span class=w>    </span><span class=nt>value</span><span class=p>:</span><span class=w> </span>{{<span class=w> </span><span class=l>include &#34;app.name&#34; . }}</span><span class=w>
+</span><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>KUBE_POD_NAME</span><span class=w>
+</span><span class=w>    </span><span class=nt>valueFrom</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>fieldRef</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>fieldPath</span><span class=p>:</span><span class=w> </span><span class=l>metadata.name</span><span class=w>
+</span><span class=w>  </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>OTEL_RESOURCE_ATTRIBUTES</span><span class=w>
+</span><span class=w>    </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=l>pod=$(KUBE_POD_NAME),namespace={{ .Release.Namespace }}</span><span class=w>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>The <code>KUBE_POD_NAME</code> is important to show logs from a given trace of that pod.</p>
+<p>Finally, getting the rather new exemplar support working with Spring Boot Actuator currently requires to manually import the <code>1.9.0-SNAPSHOT</code> version of Micrometer and also wiring up the <code>PrometheusMetricsRegistry</code> with a <code>DefaultExemplarSampler</code>. This little hack will become obsolete once <a href=https://github.com/micrometer-metrics/micrometer/releases>Micrometer 1.9.0 is released</a> and <a href=https://github.com/spring-projects/spring-boot/pull/30472>this PR against Spring Boot</a> is merged.</p>
+<p>Note that exemplars for timer metrics, such as <code>http_server_requests</code>, are only reported for histogram bucket counters, from which the quantiles are calculated.
+That means you need to explicitly enable distribution statistics within your <code>application.yaml</code> as follows:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>management</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>metrics</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>distribution</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>percentiles-histogram</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>http.server.requests</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w>      </span><span class=nt>minimum-expected-value</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>http.server.requests</span><span class=p>:</span><span class=w> </span><span class=l>5ms</span><span class=w>
+</span><span class=w>      </span><span class=nt>maximum-expected-value</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>http.server.requests</span><span class=p>:</span><span class=w> </span><span class=l>1000ms</span><span class=w>
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id=enabling-exemplar-support-in-prometheus>Enabling exemplar support in Prometheus</h2>
+<p>The Prometheus deployment needs to explicitly enable the feature for exemplar support. This is done in the <code>kube-prometheus-stack</code> Helm chart using the following <code>values.yaml</code> config part:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>kube-prometheus-stack</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>prometheus</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>prometheusSpec</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>enableFeatures</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span>- <span class=l>exemplar-storage</span><span class=w>
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id=configuring-grafana-data-sources>Configuring Grafana data sources</h2>
+<p>In order to make Grafana show the various buttons to automatically go from
+logs to traces, from traces to logs and also from exemplars to traces, the
+data sources need to be configured as follows.
+See also <code>additionalDataSources</code>
+in the <code>values.yaml</code> of the <code>kube-prometheus-stack</code> Helm chart.</p>
+<p><strong>Tempo data source</strong></p>
+<p>See <a href=https://grafana.com/docs/grafana/latest/datasources/tempo/#provision-the-tempo-data-source>documentation</a>.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Tempo</span><span class=w>
+</span><span class=w>  </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>tempo</span><span class=w>
+</span><span class=w>  </span><span class=nt>uid</span><span class=p>:</span><span class=w> </span><span class=l>tempo</span><span class=w>
+</span><span class=w>  </span><span class=nt>access</span><span class=p>:</span><span class=w> </span><span class=l>proxy</span><span class=w>
+</span><span class=w>  </span><span class=nt>url</span><span class=p>:</span><span class=w> </span><span class=l>http://tempo.tempo:3100</span><span class=w>
+</span><span class=w>  </span><span class=nt>jsonData</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>httpMethod</span><span class=p>:</span><span class=w> </span><span class=l>GET</span><span class=w>
+</span><span class=w>    </span><span class=nt>tracesToLogs</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>datasourceUid</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;loki&#39;</span><span class=w>
+</span><span class=w>      </span><span class=c># they must be attached by the instrumentation</span><span class=w>
+</span><span class=w>      </span><span class=nt>tags</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=s1>&#39;pod&#39;</span><span class=p>,</span><span class=w> </span><span class=s1>&#39;namespace&#39;</span><span class=w> </span><span class=p>]</span><span class=w>
+</span><span class=w>      </span><span class=c># extend time span a little, to ensure catching all logs of that span</span><span class=w>
+</span><span class=w>      </span><span class=nt>spanStartTimeShift</span><span class=p>:</span><span class=w> </span><span class=l>1s</span><span class=w>
+</span><span class=w>      </span><span class=nt>spandEndTimeShift</span><span class=p>:</span><span class=w> </span><span class=l>1s</span><span class=w>
+</span><span class=w>      </span><span class=nt>lokiSearch</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w>    </span><span class=nt>serviceMap</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>datasourceUid</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;prometheus&#39;</span><span class=w>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>You might consider adding one or both of the following lines here:</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=nt>filterByTraceID</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span><span class=w></span><span class=nt>filterBySpanID</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>Loki data source</strong></p>
+<p>See <a href=https://grafana.com/docs/grafana/latest/datasources/loki/#configure-the-data-source-with-provisioning>documentation</a>.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Loki</span><span class=w>
+</span><span class=w>  </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>loki</span><span class=w>
+</span><span class=w>  </span><span class=nt>uid</span><span class=p>:</span><span class=w> </span><span class=l>loki</span><span class=w>
+</span><span class=w>  </span><span class=nt>access</span><span class=p>:</span><span class=w> </span><span class=l>proxy</span><span class=w>
+</span><span class=w>  </span><span class=nt>url</span><span class=p>:</span><span class=w> </span><span class=l>http://loki.loki:3100</span><span class=w>
+</span><span class=w>  </span><span class=nt>jsonData</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>derivedFields</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>trace_id</span><span class=w>
+</span><span class=w>        </span><span class=nt>datasourceUid</span><span class=p>:</span><span class=w> </span><span class=l>tempo</span><span class=w>
+</span><span class=w>        </span><span class=nt>matcherRegex</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;trace_id=(\\w+)&#34;</span><span class=w>
+</span><span class=w>        </span><span class=nt>url</span><span class=p>:</span><span class=w> </span><span class=s1>&#39;$${__value.raw}&#39;</span><span class=w>
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>Prometheus data source</strong></p>
+<p>See <a href=https://grafana.com/docs/grafana/latest/datasources/prometheus/#provision-the-prometheus-data-source>documentation</a>.</p>
+<div class=highlight><div class=chroma>
+<table class=lntable><tr><td class=lntd>
+<pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td>
+<td class=lntd>
+<pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Prometheus</span><span class=w>
+</span><span class=w>  </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>prometheus</span><span class=w>
+</span><span class=w>  </span><span class=nt>uid</span><span class=p>:</span><span class=w> </span><span class=l>prometheus</span><span class=w>
+</span><span class=w>  </span><span class=nt>access</span><span class=p>:</span><span class=w> </span><span class=l>proxy</span><span class=w>
+</span><span class=w>  </span><span class=nt>url</span><span class=p>:</span><span class=w> </span><span class=l>http://kube-prometheus-stack-prometheus:9090/</span><span class=w>
+</span><span class=w>  </span><span class=nt>jsonData</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>exemplarTraceIdDestinations</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>trace_id</span><span class=w>
+</span><span class=w>        </span><span class=nt>datasourceUid</span><span class=p>:</span><span class=w> </span><span class=l>tempo</span><span class=w>
+</span><span class=w>        </span><span class=nt>urlDisplayLabel</span><span class=p>:</span><span class=w> </span><span class=l>View in Tempo</span><span class=w>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>For Prometheus, the <code>urlDisplayLabel</code> wasn&rsquo;t really documented in Grafana and omitting it makes the &ldquo;View in Tempo&rdquo; button for exemplars disappear. It can be found <a href=https://github.com/grafana-operator/grafana-operator/blob/master/api/integreatly/v1alpha1/grafanadatasource_types.go#L205>in the source</a> though.</p>
+<h1 id=outlook>Outlook</h1>
+<p>Currently, the demo just deploys some carefully configured Helm charts into Minikube.
+This could be improved by developing an <code>cloud-observability-stack</code> helm chart combining Loki, Tempo, Prometheus, Promtail and Grafana.</p>
+<p>Furthermore, one could build a Kubernetes operator to inject Java instrumentation into the running workloads during startup based on an opt-in Kubernetes annotation.
+Such a solution exists in the form of the <a href=https://github.com/open-telemetry/opentelemetry-operator>OpenTelemetry operator</a>.
+Unfortunately, this operator is less well integrated with Grafana as it is using the OpenTelemetry collector and requires the deployment of the Cert Manager Operator which causes additional operational overhead.</p>
+<p>Feel free to raise <a href=https://github.com/qaware/cloud-observability-grafana-spring-boot>issues in the demo project</a> or <a href=mailto:andreas.grub@qaware.de>contact the author via mail</a> if you have further ideas or suggestions what to improve.</p>
+<p>This blog post was sponsored by my current employer, <a href=https://qaware.de>QAware</a>. If you enjoy working on challenging topics such as engineering proper cloud observability, <a href=https://www.qaware.de/karriere-uebersicht>then join us!</a></p>
+</div>
+<div class="post_extra mb-2">
+<div class="share copy"></div>
+<a href="http://twitter.com/share?text=Check out this post on the QAware Engineering Blog about Cloud%20Observability%20with%20Grafana%20and%20Spring%20Boot&url=https%3a%2f%2fblog.qaware.de%2fposts%2fcloud-observability-grafana-spring-boot%2f&hashtags=Cloud%2cObservability%2cGrafana%2cTempo%2cLoki%2cPrometheus%2cSpringBoot%2cSpring%2cKubernetes%2cExemplars%2cTracing%2cTelemetry%2cInstrumentation">
+<div class="share twitter"></div>
+</a>
+<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3a%2f%2fblog.qaware.de%2fposts%2fcloud-observability-grafana-spring-boot%2f">
+<div class="share linkedin"></div>
+</a>
+<a href="mailto:?subject=Cloud%20Observability%20with%20Grafana%20and%20Spring%20Boot&body=Hi,%0D%0A%0D%0ACheck out this post on the QAware Engineering Blog: https%3a%2f%2fblog.qaware.de%2fposts%2fcloud-observability-grafana-spring-boot%2f%0D%0A%0D%0ABest Regards">
+<div class="share email"></div>
+</a>
+</div>
+<div>
+</div>
+</div>
+</div>
+</div>
+<a href=https://blog.qaware.de/ class=post_nav><span class=post_next>The Latest Posts</span></a>
+</main>
+<footer>
+<div class=footer-container>
+<div class=short-link-area>
+<div class=margin>
+<div class=logo-qaware>
+<a href=/><img src=/images/icons/logo-qaware-white.png alt=QAware width=195 height=43></a>
+</div>
+<div class=clr></div>
+<div class=footer-links>
+<a href=https://www.qaware.de/newsbereich/ class=foot-single-link>News</a>
+<a href=https://www.qaware.de/eventkalender/ class=foot-single-link>Eventkalender</a>
+<a href=https://www.qaware.de/kontakt/ class=foot-single-link>Kontakt</a>
+<div class=footer-table>
+<a href=https://info.qaware.de/en/legal-notice class="foot-single-link footer-table-cell">Legal Notice</a>&nbsp;|&nbsp;
+<a href=https://info.qaware.de/en/legal-notice class="foot-single-link footer-table-cell">Privacy</a>
+</div>
+</div>
+<nav class=nav-social>
+<ul class=e-social id=c1375>
+<li>
+<a href=http://www.kununu.com/qaware title=Kununu target=_blank class="icon icon-kununu-outline"><span></span></a>
+</li>
+<li>
+<a href=https://www.twitter.com/qaware title=Twitter target=_blank class="icon icon-twitter-outline"><span></span></a>
+</li>
+<li>
+<a href=https://www.linkedin.com/company/qaware-gmbh title=LinkedIn target=_blank class="icon icon-linkedin-outline"><span></span></a>
+</li>
+<li>
+<a href=https://github.com/qaware title=GitHub target=_blank class="icon icon-git-outline"><span></span></a>
+</li>
+<li>
+<a href=https://www.slideshare.net/qaware title=SlideShare target=_blank class="icon icon-slideshare-outline"><span></span></a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCmNf72xADnO57idipq9jvMg title=Youtube target=_blank class="icon icon-youtube-outline"><span></span></a>
+</li>
+</ul>
+</nav>
+<div class=clr></div>
+</div>
+</div>
+<nav class="footer-nav nav-area">
+<ul class=margin>
+<li>
+<a href=https://www.qaware.de/leistung/>Leistung</a>
+<ul>
+<li>
+<a href=https://www.qaware.de/leistung/#diagnose>Diagnose</a>
+</li>
+<li>
+<a href=https://www.qaware.de/leistung/#sanierung>Sanierung</a>
+</li>
+<li>
+<a href=https://www.qaware.de/leistung/#leistung-exploration>Exploration</a>
+</li>
+<li>
+<a href=https://www.qaware.de/leistung/#leistung-realisierung>Realisierung</a>
+</li>
+<li>
+<a href=https://www.qaware.de/leistung/#kunden>Referenzen</a>
+</li>
+</ul>
+</li>
+<li>
+<a href=https://www.qaware.de/karriere/>Karriere</a>
+<ul>
+<li>
+<a href=https://www.qaware.de/karriere/#arbeitsplatz>Arbeitsplatz</a>
+</li>
+<li>
+<a href=https://www.qaware.de/karriere/#kultur>Kultur</a>
+</li>
+<li>
+<a href=https://www.qaware.de/karriere/#entwicklung>Entwicklung</a>
+</li>
+<li>
+<a href=https://www.qaware.de/karriere/#weiterbildung>Weiterbildung</a>
+</li>
+<li>
+<a href=https://www.qaware.de/karriere/#jobs>Jobs</a>
+</li>
+<li>
+<a href=https://www.qaware.de/karriere/#veranstaltungen>Veranstaltungen</a>
+</li>
+</ul>
+</li>
+<li>
+<a href=https://www.qaware.de/wissen/>Wissen</a>
+<ul>
+<li>
+<a href=https://www.qaware.de/wissen/#manifest>Manifest</a>
+</li>
+<li>
+<a href=https://www.qaware.de/wissen/#blog>Blog</a>
+</li>
+<li>
+<a href=https://www.qaware.de/wissen/#konferenzen>Konferenzen</a>
+</li>
+<li>
+<a href=https://www.qaware.de/wissen/#fachartikel>Fachartikel</a>
+</li>
+<li>
+<a href=https://www.qaware.de/wissen/#buecher>Bücher</a>
+</li>
+<li>
+<a href=https://www.qaware.de/wissen/#vorlesungen>Vorlesungen</a>
+</li>
+<li>
+<a href=https://www.qaware.de/wissen/#forschung>Forschung</a>
+</li>
+</ul>
+</li>
+<li>
+<a href=https://www.qaware.de/unternehmen/>Unternehmen</a>
+<ul>
+<li>
+<a href=https://www.qaware.de/unternehmen/#unternehmenskultur>Mission</a>
+</li>
+<li>
+<a href=https://www.qaware.de/unternehmen/#kennzahlen>Kennzahlen</a>
+</li>
+<li>
+<a href=https://www.qaware.de/unternehmen/#management>Management</a>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</footer>
+<script src=https://blog.qaware.de/js/index.min.8a1f47e1f14a890f4cd4ed7176a260ad67504f0f9ad2aa98650041defa70314d6d638eee309ba5b358769c6d6af791134d255885d21daee0299426b855837ddc.js></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-538827-3"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','UA-538827-3')</script>
+</body>
+</html>
