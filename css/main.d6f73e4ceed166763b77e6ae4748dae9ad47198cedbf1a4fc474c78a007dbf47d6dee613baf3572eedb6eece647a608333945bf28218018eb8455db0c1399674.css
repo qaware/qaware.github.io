@@ -100,8 +100,9 @@
   --bg: var(--light);
   --text: var(--dark);
   --font: 'Spartan', sans-serif;
-  --theme: #28537d 
-;
+  --theme: #28537d;
+  --theme-secondary: #009ee3;
+  /* corporate design color: blue secondary */
 }
 
 @keyframes showMenu {
@@ -158,7 +159,7 @@ body {
 
 a {
   text-decoration: none;
-  color: inherit;
+  color: var(--theme-secondary);
   outline: none;
 }
 
@@ -513,6 +514,17 @@ figure img {
   transform: scale(1.03);
 }
 
+.spoiler {
+  border: dashed var(--theme) 0.2rem;
+  border-radius: 1rem;
+  padding: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+
+.spoiler code {
+  white-space: pre;
+}
+
 .share {
   margin-left: 8px;
   position: relative;
@@ -615,7 +627,7 @@ figure img {
 }
 
 .footer a {
-  color: var(--theme);
+  color: var(--theme-secondary);
   opacity: 0.8;
   transition: opacity 0.3s ease-in-out;
 }
@@ -1262,7 +1274,11 @@ footer li {
 .post h2 {
   position: relative;
   padding-right: 32px;
-  margin: 0.5rem auto;
+}
+
+.post h3, .post h4 {
+  text-align: left;
+  padding: 5px 0 0 0;
 }
 
 .post img:not(.icon) {
@@ -1271,12 +1287,6 @@ footer li {
   height: auto;
   margin-left: auto;
   margin-right: auto;
-}
-
-.post h3, .post h4 {
-  margin: 0.5rem auto;
-  text-align: left;
-  padding: 5px 0 0 0;
 }
 
 .post p {
@@ -1313,7 +1323,7 @@ footer li {
 }
 
 .post_inner a {
-  color: var(--theme);
+  color: var(--theme-secondary);
   transition: all 0.3s;
 }
 
@@ -1322,13 +1332,12 @@ footer li {
   text-decoration: underline;
 }
 
-.post_inner img:not(.icon) {
-  margin-bottom: 2rem;
+.post_inner h1, .post_inner h2, .post_inner h3, .post_inner h4 {
+  margin: 1.75rem auto 0.5rem auto;
 }
 
-.post_inner img:not(.icon) ~ h1, .post_inner img:not(.icon) ~ h2, .post_inner img:not(.icon) ~ h3, .post_inner img:not(.icon) ~ h4 {
-  margin-top: 0;
-  padding-top: 0;
+.post_inner img:not(.icon) {
+  margin-bottom: 2rem;
 }
 
 .post .icon {
@@ -1395,7 +1404,7 @@ footer li {
 }
 
 .post_meta a:hover {
-  color: var(--theme);
+  color: var(--theme-secondary);
   text-decoration: underline;
   opacity: 0.9;
 }
@@ -1952,7 +1961,7 @@ ul.tag-list {
 }
 
 .go {
-  color: #ccc;
+  color: unset;
 }
 
 .gp {
