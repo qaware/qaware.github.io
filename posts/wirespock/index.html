@@ -29,7 +29,7 @@
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>class</span> <span class=nc>BookServiceClientSpec</span> <span class=kd>extends</span> <span class=n>Specification</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=nd>@Rule</span>
-</span></span><span class=line><span class=cl>    <span class=n>WireMockRule</span> <span class=n>wireMockRule</span> <span class=o>=</span> <span class=k>new</span> <span class=n>WireMockRule</span><span class=o>(</span><span class=mi>18080</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>WireMockRule</span> <span class=n>wireMockRule</span> <span class=o>=</span> <span class=k>new</span> <span class=n>WireMockRule</span><span class=o>(</span><span class=n>18080</span><span class=o>)</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=nd>@Shared</span>
 </span></span><span class=line><span class=cl>    <span class=n>def</span> <span class=n>client</span> <span class=o>=</span> <span class=k>new</span> <span class=n>BookServiceClient</span><span class=o>(</span><span class=s>&#34;http://localhost:18080&#34;</span><span class=o>)</span>
@@ -42,7 +42,7 @@
 </span></span><span class=line><span class=cl>        <span class=n>def</span> <span class=n>books</span> <span class=o>=</span> <span class=n>client</span><span class=o>.</span><span class=na>findAll</span><span class=o>()</span>
 </span></span><span class=line><span class=cl><span class=nl>
 </span></span></span><span class=line><span class=cl><span class=nl>        then:</span> <span class=s>&#34;we expect two books to be found&#34;</span>
-</span></span><span class=line><span class=cl>        <span class=n>books</span><span class=o>.</span><span class=na>size</span><span class=o>()</span> <span class=o>==</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl>        <span class=n>books</span><span class=o>.</span><span class=na>size</span><span class=o>()</span> <span class=o>==</span> <span class=n>2</span>
 </span></span><span class=line><span class=cl><span class=nl>
 </span></span></span><span class=line><span class=cl><span class=nl>        and:</span> <span class=s>&#34;the mock to be invoked exactly once&#34;</span>
 </span></span><span class=line><span class=cl>        <span class=c1>// TODO

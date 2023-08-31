@@ -70,7 +70,7 @@ As you can see, TestFX is geared towards testing GUI components of an applicatio
 </span></span><span class=line><span class=cl>    <span class=n>click</span><span class=o>(</span><span class=s>&#34;#loginButton&#34;</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=c1>// Wait for success with a 10s timeout
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>waitUntil</span><span class=o>(</span><span class=s>&#34;#showLabel&#34;</span><span class=o>,</span> <span class=n>is</span><span class=o>(</span><span class=n>visible</span><span class=o>()),</span> <span class=mi>10</span><span class=o>);</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>waitUntil</span><span class=o>(</span><span class=s>&#34;#showLabel&#34;</span><span class=o>,</span> <span class=n>is</span><span class=o>(</span><span class=n>visible</span><span class=o>()),</span> <span class=n>10</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=n>String</span> <span class=n>text</span> <span class=o>=</span> <span class=o>((</span><span class=n>Label</span><span class=o>)</span> <span class=n>find</span><span class=o>(</span><span class=s>&#34;#showLabel&#34;</span><span class=o>)).</span><span class=na>getText</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>    <span class=n>verifyThat</span><span class=o>(</span><span class=n>text</span><span class=o>,</span> <span class=n>containsString</span><span class=o>(</span><span class=s>&#34;OK&#34;</span><span class=o>));</span>
