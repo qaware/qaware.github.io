@@ -10,14 +10,14 @@
   font-family: "Spartan";
   font-style: normal;
   font-weight: 400;
-  src: local("Spartan Regular"), url("https://blog.qaware.de/fonts/l7gfbjR61M69yt8Z2QKtlAXJExs.woff2") format("woff");
+  src: local("Spartan Regular"), url("https://blog.qaware.de/fonts/Spartan-Regular.ttf") format("ttf");
 }
 
 @font-face {
   font-family: "Spartan";
   font-style: normal;
   font-weight: 700;
-  src: local("Spartan Bold"), url("https://blog.qaware.de/fonts/l7gfbjR61M69yt8Z2QKtlAXJExs.woff") format("woff");
+  src: local("Spartan Bold"), url("https://blog.qaware.de/fonts/Spartan-Bold.ttf") format("ttf");
 }
 
 @font-face {
@@ -201,6 +201,13 @@ code {
   overflow-x: auto;
   font-family: Hack, monospace;
   font-size: 90%;
+}
+
+pre code {
+  display: inline-block;
+  margin-left: 0.125rem;
+  border-left: 2px solid var(--theme-secondary);
+  padding-left: 1rem;
 }
 
 h1, h2, h3, h4, h5 {
