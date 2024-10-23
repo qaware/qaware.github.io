@@ -203,13 +203,6 @@ code {
   font-size: 90%;
 }
 
-pre code {
-  display: inline-block;
-  margin-left: 0.125rem;
-  border-left: 2px solid var(--theme-secondary);
-  padding-left: 1rem;
-}
-
 h1, h2, h3, h4, h5 {
   font-family: inherit;
   text-transform: capitalize;
